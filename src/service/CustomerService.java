@@ -1,43 +1,42 @@
 package service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import model.Customer;
 
 public class CustomerService {
 	
-	private Map<String, Customer> customerMap;
+	private Map<String, Customer> customers;
 
+	private static final CustomerService instance = new CustomerService();
+	
 	public CustomerService() {
-		customerMap = new HashMap<String, Customer>();
-		
-		addCustomer(new Customer("id001", "alice", "alice.hansung.ac.kr"));
-		addCustomer(new Customer("id002", "bob", "bob.hansung.ac.kr"));
-		addCustomer(new Customer("id003", "charlie", "charlie.hansung.ac.kr"));
-		addCustomer(new Customer("id004", "david", "david.hansung.ac.kr"));
-		addCustomer(new Customer("id005", "trudy", "trudy.hansung.ac.kr"));
+		customers = new HashMap<String, Customer>();
+	}
+	
+	public static CustomerService getInstance() {
+		return instance;
 	}
 
-	private void addCustomer(Customer customer) {
-		
-		customerMap.put(customer.getId(), customer);
-		
+	public void addCustomer(Customer customer) {
+		customers.put(customer.getId(), customer);
 	}
 	
 	public Customer findCustomer(String id) {
 		
 		if(id != null)
-			return (customerMap.get(id.toLowerCase()));
+			return (customers.get(id.toLowerCase()));
 		else
 			return null;
 	}
-	
-	public List<Customer> getAllCustomers() {
-		
-		List<Customer> customerList = new ArrayList<Customer>(customerMap.values());
-		return customerList;
+
+	public Customer login(String id,String password){
+		Customer customer = findCustomer(id);
+		if( customer.getPassword().equals(password) ) {
+			return customer;
+		}
+		else
+			return null;
 	}
 }
